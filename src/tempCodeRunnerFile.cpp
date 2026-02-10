@@ -10,8 +10,6 @@ struct Student {
     float marks;
 };
 
-vector<Student> students;
-
 void addStudent() {
     Student s;
 
@@ -32,6 +30,8 @@ void addStudent() {
 
     cout << "Student added successfully..!!" << endl;
 }
+
+vector<Student> students;
 
 int main() {
     int choice;
