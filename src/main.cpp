@@ -33,21 +33,58 @@ void addStudent() {
     cout << "Student added successfully..!!" << endl;
 }
 
+void displayStudents() {
+    if (students.size() == 0) {
+        cout << "No Students Found..!" << endl;
+        return;
+    } else {
+        cout << "--- Student Records ---" << endl;
+        for (int i=0; i<students.size(); i++) {
+            cout << "Roll no: " << students[i].roll << endl;
+            cout << "Name: " << students[i].name << endl;
+            cout << "Age: " << students[i].age << endl;
+            cout << "Marks: " << students[i].marks << endl;
+            cout << "----------------------" << endl;
+        }
+    }
+}
+
 int main() {
     int choice;
 
-    cout << "Student Record Management System" << endl;
-    cout<<"1. Add Student"<<endl;
-    cout<<"2. Display Students"<<endl;
-    cout<<"3. Search Student"<<endl;
-    cout<<"4. Exit"<<endl;
+    do {
+        cout << "\n----- Student Record Management System -----\n";
+        cout << "1. Add Student\n";
+        cout << "2. Display Students\n";
+        cout << "3. Search Student\n";
+        cout << "4. Exit\n";
 
-    cout<<"Enter your choice: "<<endl;
-    cin>> choice;
+        cout << "Enter your choice: ";
+        cin >> choice;
 
-    if (choice == 1) {
-        addStudent();
-    }
+        switch (choice) {
+            case 1:
+                addStudent();
+                break;
+
+            case 2:
+                displayStudents();
+                break;
+
+            case 3:
+                cout << "Search feature coming soon...\n";
+                break;
+
+            case 4:
+                cout << "Exiting program...\n";
+                break;
+
+            default:
+                cout << "Invalid choice. Try again.\n";
+        }
+
+    } while (choice != 4);
 
     return 0;
 }
+
