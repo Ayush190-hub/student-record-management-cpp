@@ -49,6 +49,34 @@ void displayStudents() {
     }
 }
 
+void searchStudent() {
+    if (students.size() == 0) {
+        cout << "No Students available to search..!!" << endl;
+        return;
+    } else {
+        int roll;
+        cout << "Enter Roll no. to search: ";
+        cin >> roll;
+
+        bool found = false;
+
+        for (int i=0; i<students.size(); i++) {
+            if (students[i].roll == roll) {
+                cout << "Student Found..!!" << endl;
+                cout << "Roll: " << students[i].roll << endl;
+                cout << "Name: " << students[i].name << endl;
+                cout << "Age: " << students[i].age << endl;
+                cout << "Marks: " << students[i].marks << endl;
+                found = true;
+                break;
+            }
+        }
+        if (!found) {
+            cout << "Student with Roll" << roll << "not found" << endl;
+        }
+    }
+}
+
 int main() {
     int choice;
 
@@ -72,7 +100,7 @@ int main() {
                 break;
 
             case 3:
-                cout << "Search feature coming soon...\n";
+                searchStudent();
                 break;
 
             case 4:
