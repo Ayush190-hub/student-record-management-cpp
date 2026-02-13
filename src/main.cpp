@@ -77,6 +77,31 @@ void searchStudent() {
     }
 }
 
+void deleteStudent() {
+    if (students.size() == 0) {
+        cout << "No Student to display..!!" << endl;
+        return;
+    } else {
+        int roll;
+        cout << "Enter roll no to detele" << endl;
+        cin >> roll;
+
+        bool deleted = false;
+
+        for (int i=0; i<students.size(); i++){
+            if (students[i].roll == roll) {
+                students.erase(students.begin() + i);
+                cout << "Student deleted successfully..!!" << endl;
+                deleted = true;
+                break;
+            }
+        }
+        if (!deleted) {
+            cout << "Student with roll no: " << roll << "Not found" << endl;
+        }
+    }
+}
+
 int main() {
     int choice;
 
@@ -85,7 +110,8 @@ int main() {
         cout << "1. Add Student\n";
         cout << "2. Display Students\n";
         cout << "3. Search Student\n";
-        cout << "4. Exit\n";
+        cout << "4. Delete Student\n";
+        cout << "5. Exit the Program\n";
 
         cout << "Enter your choice: ";
         cin >> choice;
@@ -104,14 +130,17 @@ int main() {
                 break;
 
             case 4:
-                cout << "Exiting program...\n";
+                deleteStudent();
                 break;
+
+            case 5:
+                cout << "Exiting Program" << endl;
 
             default:
                 cout << "Invalid choice. Try again.\n";
         }
 
-    } while (choice != 4);
+    } while (choice != 5);
 
     return 0;
 }
