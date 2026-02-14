@@ -102,6 +102,39 @@ void deleteStudent() {
     }
 }
 
+void updateStudent() {
+    if (students.size() == 0) {
+        cout << "No Student is available for update" << endl;
+        return;
+    } else {
+        int roll;
+        cout << "Enter roll no to update";
+        cin >> roll;
+
+        bool updated = false;
+
+        for (int i=0; i<students.size(); i++) {
+            if (students[i].roll == roll) {
+                cout <<"\nUpdating student record\n";
+
+                cout << "Enter name: ";
+                cin.ignore();
+                getline(cin, students[i].name);
+
+                cout <<"Enter age: ";
+                cin >> students[i].age;
+
+                cout <<"Enter marks: ";
+                cin >> students[i].marks;
+
+                updated = true;
+                cout << "Student updated successfully" << endl;
+                break;
+            }
+        }
+    }
+}
+
 int main() {
     int choice;
 
@@ -111,7 +144,8 @@ int main() {
         cout << "2. Display Students\n";
         cout << "3. Search Student\n";
         cout << "4. Delete Student\n";
-        cout << "5. Exit the Program\n";
+        cout << "5. Update Student data";
+        cout << "6. Exit the program\n";
 
         cout << "Enter your choice: ";
         cin >> choice;
@@ -134,13 +168,17 @@ int main() {
                 break;
 
             case 5:
-                cout << "Exiting Program" << endl;
+                updateStudent();
+                break;
+
+            case 6:
+                cout << "Exit the program\n";
 
             default:
                 cout << "Invalid choice. Try again.\n";
         }
 
-    } while (choice != 5);
+    } while (choice != 6);
 
     return 0;
 }
