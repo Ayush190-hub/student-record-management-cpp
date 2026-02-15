@@ -1,6 +1,8 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <limits>
+
 using namespace std;
 
 struct Student {
@@ -10,16 +12,43 @@ struct Student {
     float marks;
 };
 
-vector<Student> students;
+vector<Student> studentList;
 
+// ---------- Utility ----------
+bool isEmpty() {
+    if (studentList.empty()) {
+        cout << "No students found.\n";
+        return true;
+    }
+    return false;
+}
+
+void clearInput() {
+    cin.clear();
+    cin.ignore(numeric_limits<streamsize>::max(), '\n');
+}
+
+// ---------- Menu ----------
+void showMenu() {
+    cout << "\n----- Student Record Management System -----\n";
+    cout << "1. Add Student\n";
+    cout << "2. Display Students\n";
+    cout << "3. Search Student\n";
+    cout << "4. Delete Student\n";
+    cout << "5. Update Student\n";
+    cout << "6. Exit\n";
+    cout << "Enter your choice: ";
+}
+
+// ---------- CRUD ----------
 void addStudent() {
     Student s;
 
     cout << "Enter roll no: ";
     cin >> s.roll;
+    clearInput();
 
-    cout << "Enter Name: ";
-    cin.ignore();
+    cout << "Enter name: ";
     getline(cin, s.name);
 
     cout << "Enter age: ";
@@ -28,153 +57,130 @@ void addStudent() {
     cout << "Enter marks: ";
     cin >> s.marks;
 
-    students.push_back(s);
-
-    cout << "Student added successfully..!!" << endl;
+    studentList.push_back(s);
+    cout << "Student added successfully.\n";
 }
 
 void displayStudents() {
-    if (students.size() == 0) {
-        cout << "No Students Found..!" << endl;
-        return;
-    } else {
-        cout << "--- Student Records ---" << endl;
-        for (int i=0; i<students.size(); i++) {
-            cout << "Roll no: " << students[i].roll << endl;
-            cout << "Name: " << students[i].name << endl;
-            cout << "Age: " << students[i].age << endl;
-            cout << "Marks: " << students[i].marks << endl;
-            cout << "----------------------" << endl;
-        }
+    if (isEmpty()) return;
+
+    cout << "\n--- Student Records ---\n";
+    for (size_t i = 0; i < studentList.size(); i++) {
+        cout << "Roll: " << studentList[i].roll << endl;
+        cout << "Name: " << studentList[i].name << endl;
+        cout << "Age: " << studentList[i].age << endl;
+        cout << "Marks: " << studentList[i].marks << endl;
+        cout << "----------------------\n";
     }
 }
 
 void searchStudent() {
-    if (students.size() == 0) {
-        cout << "No Students available to search..!!" << endl;
-        return;
-    } else {
-        int roll;
-        cout << "Enter Roll no. to search: ";
-        cin >> roll;
+    if (isEmpty()) return;
 
-        bool found = false;
+    int roll;
+    cout << "Enter roll to search: ";
+    cin >> roll;
 
-        for (int i=0; i<students.size(); i++) {
-            if (students[i].roll == roll) {
-                cout << "Student Found..!!" << endl;
-                cout << "Roll: " << students[i].roll << endl;
-                cout << "Name: " << students[i].name << endl;
-                cout << "Age: " << students[i].age << endl;
-                cout << "Marks: " << students[i].marks << endl;
-                found = true;
-                break;
-            }
-        }
-        if (!found) {
-            cout << "Student with Roll" << roll << "not found" << endl;
+    bool found = false;
+    for (size_t i = 0; i < studentList.size(); i++) {
+        if (studentList[i].roll == roll) {
+            cout << "\nStudent Found\n";
+            cout << "Roll: " << studentList[i].roll << endl;
+            cout << "Name: " << studentList[i].name << endl;
+            cout << "Age: " << studentList[i].age << endl;
+            cout << "Marks: " << studentList[i].marks << endl;
+            found = true;
+            break;
         }
     }
+
+    if (!found)
+        cout << "Student with roll " << roll << " not found.\n";
 }
 
 void deleteStudent() {
-    if (students.size() == 0) {
-        cout << "No Student to display..!!" << endl;
-        return;
-    } else {
-        int roll;
-        cout << "Enter roll no to detele" << endl;
-        cin >> roll;
+    if (isEmpty()) return;
 
-        bool deleted = false;
+    int roll;
+    cout << "Enter roll to delete: ";
+    cin >> roll;
 
-        for (int i=0; i<students.size(); i++){
-            if (students[i].roll == roll) {
-                students.erase(students.begin() + i);
-                cout << "Student deleted successfully..!!" << endl;
-                deleted = true;
-                break;
-            }
-        }
-        if (!deleted) {
-            cout << "Student with roll no: " << roll << "Not found" << endl;
+    for (size_t i = 0; i < studentList.size(); i++) {
+        if (studentList[i].roll == roll) {
+            studentList.erase(studentList.begin() + i);
+            cout << "Student deleted successfully.\n";
+            return;
         }
     }
+
+    cout << "Student with roll " << roll << " not found.\n";
 }
 
 void updateStudent() {
-    if (students.size() == 0) {
-        cout << "No Student is available for update" << endl;
-        return;
-    } else {
-        int roll;
-        cout << "Enter roll no to update";
-        cin >> roll;
+    if (isEmpty()) return;
 
-        bool updated = false;
+    int roll;
+    cout << "Enter roll to update: ";
+    cin >> roll;
+    clearInput();
 
-        for (int i=0; i<students.size(); i++) {
-            if (students[i].roll == roll) {
-                cout <<"\nUpdating student record\n";
+    for (size_t i = 0; i < studentList.size(); i++) {
+        if (studentList[i].roll == roll) {
+            cout << "Enter new name: ";
+            getline(cin, studentList[i].name);
 
-                cout << "Enter name: ";
-                cin.ignore();
-                getline(cin, students[i].name);
+            cout << "Enter new age: ";
+            cin >> studentList[i].age;
 
-                cout <<"Enter age: ";
-                cin >> students[i].age;
+            cout << "Enter new marks: ";
+            cin >> studentList[i].marks;
 
-                cout <<"Enter marks: ";
-                cin >> students[i].marks;
-
-                updated = true;
-                cout << "Student updated successfully" << endl;
-                break;
-            }
+            cout << "Student updated successfully.\n";
+            return;
         }
     }
+
+    cout << "Student with roll " << roll << " not found.\n";
 }
 
+// ---------- MAIN ----------
 int main() {
     int choice;
 
     do {
-        cout << "\n----- Student Record Management System -----\n";
-        cout << "1. Add Student\n";
-        cout << "2. Display Students\n";
-        cout << "3. Search Student\n";
-        cout << "4. Delete Student\n";
-        cout << "5. Update Student data";
-        cout << "6. Exit the program\n";
+        showMenu();
 
-        cout << "Enter your choice: ";
-        cin >> choice;
+        if (!(cin >> choice)) {
+            cout << "Invalid input. Please enter a number.\n";
+            clearInput();
+            continue;
+        }
 
         switch (choice) {
-            case 1:
-                addStudent();
+            case 1: 
+                addStudent(); 
                 break;
 
-            case 2:
-                displayStudents();
+            case 2: 
+                displayStudents(); 
                 break;
 
-            case 3:
-                searchStudent();
+            case 3: 
+                searchStudent(); 
+                break;
+            case 4: 
+                deleteStudent(); 
                 break;
 
-            case 4:
-                deleteStudent();
+            case 5: 
+                updateStudent(); 
                 break;
 
-            case 5:
-                updateStudent();
+            case 6: 
+                cout << "Exiting program...\n"; 
                 break;
 
-            case 6:
-                cout << "Exit the program\n";
-
-            default:
+            default: 
                 cout << "Invalid choice. Try again.\n";
         }
 
@@ -182,4 +188,4 @@ int main() {
 
     return 0;
 }
-
+ 
