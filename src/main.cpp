@@ -1,6 +1,6 @@
 #include <iostream>
 #include <string>
-#include <vector>
+#include <unordered_map>
 #include <limits>
 
 using namespace std;
@@ -12,11 +12,11 @@ struct Student {
     float marks;
 };
 
-vector<Student> studentList;
+unordered_map<int, Student> studentMap;
 
 // ---------- Utility ----------
 bool isEmpty() {
-    if (studentList.empty()) {
+    if (studentMap.empty()) {
         cout << "No students found.\n";
         return true;
     }
@@ -48,6 +48,11 @@ void addStudent() {
     cin >> s.roll;
     clearInput();
 
+    if (studentMap.find(s.roll) != studentMap.end()) {
+        cout << "Duplicate roll number not allowed.\n";
+        return;
+    }
+
     cout << "Enter name: ";
     getline(cin, s.name);
 
@@ -57,22 +62,28 @@ void addStudent() {
     cout << "Enter marks: ";
     cin >> s.marks;
 
-    studentList.push_back(s);
+    studentMap[s.roll] = s;
+
     cout << "Student added successfully.\n";
 }
+
 
 void displayStudents() {
     if (isEmpty()) return;
 
     cout << "\n--- Student Records ---\n";
-    for (size_t i = 0; i < studentList.size(); i++) {
-        cout << "Roll: " << studentList[i].roll << endl;
-        cout << "Name: " << studentList[i].name << endl;
-        cout << "Age: " << studentList[i].age << endl;
-        cout << "Marks: " << studentList[i].marks << endl;
+
+    for (const auto &entry : studentMap) {
+        const Student &s = entry.second;
+
+        cout << "Roll: " << s.roll << endl;
+        cout << "Name: " << s.name << endl;
+        cout << "Age: " << s.age << endl;
+        cout << "Marks: " << s.marks << endl;
         cout << "----------------------\n";
     }
 }
+
 
 void searchStudent() {
     if (isEmpty()) return;
@@ -81,21 +92,17 @@ void searchStudent() {
     cout << "Enter roll to search: ";
     cin >> roll;
 
-    bool found = false;
-    for (size_t i = 0; i < studentList.size(); i++) {
-        if (studentList[i].roll == roll) {
-            cout << "\nStudent Found\n";
-            cout << "Roll: " << studentList[i].roll << endl;
-            cout << "Name: " << studentList[i].name << endl;
-            cout << "Age: " << studentList[i].age << endl;
-            cout << "Marks: " << studentList[i].marks << endl;
-            found = true;
-            break;
-        }
+    auto it = studentMap.find(roll);
+    if (it != studentMap.end()) {
+        Student s = it->second;
+        cout << "\nStudent Found\n";
+        cout << "Roll: " << s.roll << endl;
+        cout << "Name: " << s.name << endl;
+        cout << "Age: " << s.age << endl;
+        cout << "Marks: " << s.marks << endl;
+    } else {
+        cout << "Student not found.\n";
     }
-
-    if (!found)
-        cout << "Student with roll " << roll << " not found.\n";
 }
 
 void deleteStudent() {
@@ -105,15 +112,11 @@ void deleteStudent() {
     cout << "Enter roll to delete: ";
     cin >> roll;
 
-    for (size_t i = 0; i < studentList.size(); i++) {
-        if (studentList[i].roll == roll) {
-            studentList.erase(studentList.begin() + i);
-            cout << "Student deleted successfully.\n";
-            return;
-        }
+    if (studentMap.erase(roll)) {
+        cout << "Student deleted successfully.\n";
+    } else {
+        cout << "Student not found.\n";
     }
-
-    cout << "Student with roll " << roll << " not found.\n";
 }
 
 void updateStudent() {
@@ -124,23 +127,22 @@ void updateStudent() {
     cin >> roll;
     clearInput();
 
-    for (size_t i = 0; i < studentList.size(); i++) {
-        if (studentList[i].roll == roll) {
-            cout << "Enter new name: ";
-            getline(cin, studentList[i].name);
-
-            cout << "Enter new age: ";
-            cin >> studentList[i].age;
-
-            cout << "Enter new marks: ";
-            cin >> studentList[i].marks;
-
-            cout << "Student updated successfully.\n";
-            return;
-        }
+    auto it = studentMap.find(roll);
+    if (it == studentMap.end()) {
+        cout << "Student not found.\n";
+        return;
     }
 
-    cout << "Student with roll " << roll << " not found.\n";
+    cout << "Enter new name: ";
+    getline(cin, it->second.name);
+
+    cout << "Enter new age: ";
+    cin >> it->second.age;
+
+    cout << "Enter new marks: ";
+    cin >> it->second.marks;
+
+    cout << "Student updated successfully.\n";
 }
 
 // ---------- MAIN ----------
@@ -185,7 +187,7 @@ int main() {
         }
 
     } while (choice != 6);
-
+                                    
     return 0;
 }
  
