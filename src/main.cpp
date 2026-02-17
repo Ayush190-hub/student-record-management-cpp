@@ -2,6 +2,8 @@
 #include <string>
 #include <unordered_map>
 #include <limits>
+#include <fstream>
+#include <sstream>
 
 using namespace std;
 
@@ -13,6 +15,60 @@ struct Student {
 };
 
 unordered_map<int, Student> studentMap;
+const string FILE_NAME = "students.txt";
+
+void saveFile() {
+    ofstream fout(FILE_NAME);
+
+    if (!fout) {
+        cout << "Error opening file for saving \n";
+        return;
+    }
+    for (const auto &entry : studentMap) {
+        const Student &s = entry.second;
+        fout << s.roll << "|"
+             << s.name << "|"
+             << s.age << "|"
+             << s.marks << "\n";
+    }
+
+    fout.close();
+}
+
+void loadFromFile() {
+    ifstream fin(FILE_NAME);
+
+    if (!fin) {
+
+
+        return;
+    }
+
+    studentMap.clear();
+
+    string line;
+    while (getline(fin, line)) {
+        stringstream ss(line);
+        Student s;
+        string temp;
+
+        getline(ss, temp, '|');
+        s.roll = stoi(temp);
+
+        getline(ss,temp,'|');
+        s.name = stoi(temp);
+
+        getline(ss, temp, '|');
+        s.age = stoi(temp);
+
+        getline(ss, temp, '|');
+        s.marks = stof(temp);
+
+        studentMap[s.roll] = s;
+    }
+
+    fin.close();
+}
 
 // ---------- Utility ----------
 bool isEmpty() {
@@ -36,7 +92,7 @@ void showMenu() {
     cout << "3. Search Student\n";
     cout << "4. Delete Student\n";
     cout << "5. Update Student\n";
-    cout << "6. Exit\n";
+    cout << "6. Saving Data and Exit\n";
     cout << "Enter your choice: ";
 }
 
@@ -147,6 +203,8 @@ void updateStudent() {
 
 // ---------- MAIN ----------
 int main() {
+
+    loadFromFile();
     int choice;
 
     do {
@@ -179,6 +237,11 @@ int main() {
                 break;
 
             case 6: 
+                saveFile();
+                cout << "Data Saved..!! Exiting Program..\n"; 
+                break;
+
+            case 7: 
                 cout << "Exiting program...\n"; 
                 break;
 
