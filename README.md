@@ -1,5 +1,5 @@
 
-**Student Record Management System (C++)**
+## **Student Record Management System (C++)**
 
 A **menu-driven C++ application** to manage student records efficiently using **STL containers, file handling, and clean program structure**.
 
