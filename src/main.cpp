@@ -56,7 +56,7 @@ void loadFromFile() {
         s.roll = stoi(temp);
 
         getline(ss,temp,'|');
-        s.name = stoi(temp);
+        s.name = temp;
 
         getline(ss, temp, '|');
         s.age = stoi(temp);
